@@ -24,23 +24,18 @@ class FeedFragment : Fragment() {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
         val factory = FeedsViewModel.Factory(activity!!)
-        feedViewModel = ViewModelProviders.of(this,factory).get(FeedsViewModel::class.java)
+        feedViewModel = ViewModelProviders.of(this, factory).get(FeedsViewModel::class.java)
         mainViewModel.twitterSessionData.observe(this, Observer { twitterSession ->
-
-
             val customApiClient = RestClient.twitterClient(twitterSession!!)
             TwitterCore.getInstance().addApiClient(twitterSession, customApiClient)
             feedViewModel.getFeeds(customApiClient).observe(this, Observer { resource ->
-
                 resource?.let {
                     it.data?.run {
+                        binding.progressBar.visibility = View.GONE
                         binding.rvFeeds.adapter = FeedAdapter(this)
                     }
                 }
-
             })
-
-
         })
     }
 
