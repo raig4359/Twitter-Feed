@@ -1,32 +1,28 @@
 package com.gaurav.twitterfeed.ui
 
 import android.arch.lifecycle.LiveData
-import com.gaurav.twitterfeed.model.TestD
-import com.gaurav.twitterfeed.network.ApiResponse
-import com.gaurav.twitterfeed.network.NetworkBoundResource
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.content.Context
+import com.gaurav.twitterfeed.model.Tweet
+import com.gaurav.twitterfeed.network.CustomTwitterClient
 import com.gaurav.twitterfeed.network.Resource
-import com.gaurav.twitterfeed.network.RestClient
+import com.gaurav.twitterfeed.repository.TweetsRepository
 
-class FeedsViewModel {
+class FeedsViewModel(private val tweetRepository: TweetsRepository) : ViewModel() {
 
-    fun getTestDummy(params: HashMap<String, Int>): LiveData<Resource<ArrayList<TestD>?>> {
-        return object : NetworkBoundResource<ArrayList<TestD>,ArrayList<TestD>>() {
-            override fun saveCallResult(item: ArrayList<TestD>?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+    fun getFeeds(customApiClient: CustomTwitterClient?): LiveData<Resource<List<Tweet>?>> {
+        return tweetRepository.getFeeds(customApiClient)
+    }
 
-            override fun shouldFetch(item: ArrayList<TestD>): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+    class Factory(private val context: Context) : ViewModelProvider.NewInstanceFactory() {
 
-            override fun loadFromDb(): LiveData<ArrayList<TestD>> {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
+        private var tweetRepository: TweetsRepository = TweetsRepository(context)
 
-            override fun createCall(): LiveData<ApiResponse<ArrayList<TestD>>> {
-                return RestClient.webServices.getTest(params)
-            }
-        }.getAsLiveData()
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return FeedsViewModel(tweetRepository) as T
+        }
+
     }
 
 }

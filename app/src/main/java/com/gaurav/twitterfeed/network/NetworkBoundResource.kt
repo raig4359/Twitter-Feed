@@ -57,14 +57,14 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     @SuppressLint("StaticFieldLeak")
     private fun saveResultAndReInit(response: ApiResponse<RequestType>) {
-        object : AsyncTask<Void, Void, Void>() {
+        object : AsyncTask<Void, Void, Void?>() {
 
             override fun doInBackground(vararg voids: Void): Void? {
                 saveCallResult(response.body)
                 return null
             }
 
-            override fun onPostExecute(aVoid: Void) {
+            override fun onPostExecute(aVoid: Void?) {
                 result.addSource(loadFromDb()) {
                     result.setValue(Resource.success(it))
                 }

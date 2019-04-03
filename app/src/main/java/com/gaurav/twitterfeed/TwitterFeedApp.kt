@@ -3,10 +3,18 @@ package com.gaurav.twitterfeed
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import com.facebook.drawee.backends.pipeline.Fresco
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.DefaultLogger
 import com.twitter.sdk.android.core.TwitterConfig
+import com.twitter.sdk.android.core.TwitterCore
+import com.twitter.sdk.android.core.TwitterApiClient
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import com.twitter.sdk.android.core.TwitterSession
+
+
 
 
 class TwitterFeedApp : Application() {
@@ -14,6 +22,7 @@ class TwitterFeedApp : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
+        Fresco.initialize(this)
         setUpTwitter()
     }
 
@@ -24,6 +33,7 @@ class TwitterFeedApp : Application() {
                 .debug(true)
                 .build()
         Twitter.initialize(config)
+
     }
 
     companion object {

@@ -4,21 +4,23 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.gaurav.twitterfeed"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
-            buildConfigField "String", "API_URL", "\"https://api.nytimes.com/svc/\""
-            buildConfigField "String", "CONSUMER_KEY", "\"lbEUTREInwobWyKynpwDKdRRV\""
-            buildConfigField "String", "CONSUMER_SECRET", "\"hdGANVbOBwozBk2777FV3ak7hnSDnUuxTx7vilsVKyRvPnK9vC\""
+            buildConfigField "String", "API_URL", "\"https://api.twitter.com/\""
+            buildConfigField "String", "CONSUMER_KEY", "\"0sbcgz8q2lR6FuBnJPwDr6hxZ\""
+            buildConfigField "String", "CONSUMER_SECRET", "\"oiLKLQtwpdxRNU1iWlIENSqa42A6eCQJzm412F4kHfFzQ9UHiw\""
         }
         release {
             minifyEnabled false
@@ -29,21 +31,27 @@ android {
     dataBinding {
         enabled = true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
 
     // ViewModel and LiveData
     implementation "android.arch.lifecycle:extensions:1.1.1"
 
     // Room
     implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
@@ -66,6 +74,8 @@ dependencies {
     implementation('com.twitter.sdk.android:twitter:3.3.0@aar') {
         transitive = true
     }
+
+    api 'com.google.guava:guava:27.1-android'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

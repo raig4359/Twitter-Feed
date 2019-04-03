@@ -1,30 +1,31 @@
 package com.gaurav.twitterfeed.network
 
-import com.gaurav.twitterfeed.BuildConfig
+import com.twitter.sdk.android.core.TwitterSession
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.jackson.JacksonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
+/**
+ * Created by Gaurav on 02-04-2019.
+ */
 object RestClient {
 
-    val webServices: WebServices = Retrofit.Builder()
-            .baseUrl(BuildConfig.API_URL)
-            .client(getOkHttpClient())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
-            .build()
-            .create(WebServices::class.java)
+    private var twitterClient: CustomTwitterClient? = null
+
+    fun twitterClient(twitterSession: TwitterSession): CustomTwitterClient?  {
+        if (twitterClient == null) {
+            twitterClient = CustomTwitterClient(twitterSession, getOkHttpClient())
+        }
+        return twitterClient
+    }
 
     private fun getOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(getHttpLoggingInterceptor())
-                .addInterceptor(ConnectivityInterceptor())
-                .build()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(getHttpLoggingInterceptor())
+            .addInterceptor(ConnectivityInterceptor())
+            .build()
     }
 
     private fun getHttpLoggingInterceptor(): HttpLoggingInterceptor {
